@@ -47,7 +47,7 @@ static UIColor *kJBLineChartFooterViewDefaultSeparatorColor = nil;
         _topSeparatorView.backgroundColor = _footerSeparatorColor;
         [self addSubview:_topSeparatorView];
         
-        _leftLabel = [[UILabel alloc] init];
+        _leftLabel = [UILabel new];
         _leftLabel.adjustsFontSizeToFitWidth = YES;
         _leftLabel.font = kJBFontFooterSubLabel;
         _leftLabel.textAlignment = NSTextAlignmentLeft;
@@ -62,6 +62,15 @@ static UIColor *kJBLineChartFooterViewDefaultSeparatorColor = nil;
         _rightLabel.textColor = [UIColor whiteColor];
         _rightLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:_rightLabel];
+        
+        _centerLabel = [UILabel new];
+        _centerLabel.adjustsFontSizeToFitWidth = YES;
+        _centerLabel.font = kJBFontFooterSubLabel;
+        _centerLabel.textAlignment = NSTextAlignmentCenter;
+        _centerLabel.textColor = [UIColor whiteColor];
+        _centerLabel.backgroundColor = [UIColor clearColor];
+        [self addSubview:_centerLabel];
+        _centerLabel.center = self.center;
     }
     return self;
 }
@@ -115,10 +124,11 @@ static UIColor *kJBLineChartFooterViewDefaultSeparatorColor = nil;
     
     CGFloat xOffset = 0;
     CGFloat yOffset = kJBLineChartFooterViewSeparatorSectionPadding;
-    CGFloat width = ceil(self.bounds.size.width * 0.5);
+    CGFloat width = ceil(self.bounds.size.width /3.f);
     
     self.leftLabel.frame = CGRectMake(xOffset, yOffset, width, self.bounds.size.height);
-    self.rightLabel.frame = CGRectMake(CGRectGetMaxX(_leftLabel.frame), yOffset, width, self.bounds.size.height);
+    self.rightLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - width, yOffset, width, self.bounds.size.height);
+    self.centerLabel.frame = CGRectMake(width, yOffset, width, CGRectGetHeight(self.bounds));
 }
 
 #pragma mark - Setters

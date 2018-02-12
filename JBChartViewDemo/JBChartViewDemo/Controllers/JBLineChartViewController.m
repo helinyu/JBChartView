@@ -41,7 +41,6 @@ NSString * const kJBLineChartViewControllerNavButtonViewKey = @"view";
 @property (nonatomic, strong) JBLineChartView *lineChartView;
 @property (nonatomic, strong) JBChartInformationView *informationView;
 @property (nonatomic, strong) NSArray *chartData;
-@property (nonatomic, strong) NSArray *daysOfWeek;
 
 // Buttons
 - (void)chartToggleButtonPressed:(id)sender;
@@ -53,28 +52,6 @@ NSString * const kJBLineChartViewControllerNavButtonViewKey = @"view";
 @end
 
 @implementation JBLineChartViewController
-
-#pragma mark - Alloc/Init
-
-- (id)init
-{
-	self = [super init];
-	if (self)
-	{
-		[self initFakeData];
-	}
-	return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-	self = [super initWithCoder:aDecoder];
-	if (self)
-	{
-		[self initFakeData];
-	}
-	return self;
-}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -94,6 +71,7 @@ NSString * const kJBLineChartViewControllerNavButtonViewKey = @"view";
 
 #pragma mark - Data
 
+// 初始化数据
 - (void)initFakeData
 {
 	NSMutableArray *mutableLineCharts = [NSMutableArray array];
@@ -107,9 +85,9 @@ NSString * const kJBLineChartViewControllerNavButtonViewKey = @"view";
 		[mutableLineCharts addObject:mutableChartData];
 	}
 	_chartData = [NSArray arrayWithArray:mutableLineCharts];
-	_daysOfWeek = [[[NSDateFormatter alloc] init] shortWeekdaySymbols];
 }
 
+// 最近的数据
 - (NSArray *)largestLineData
 {
 	NSArray *largestLineData = nil;
@@ -123,23 +101,22 @@ NSString * const kJBLineChartViewControllerNavButtonViewKey = @"view";
 	return largestLineData;
 }
 
-#pragma mark - View Lifecycle
-
 - (void)loadView
 {
 	[super loadView];
 	
-	self.view.backgroundColor = kJBColorLineChartControllerBackground;
 	self.navigationItem.rightBarButtonItem = [self chartToggleButtonWithTarget:self action:@selector(chartToggleButtonPressed:)];
 	
-	self.lineChartView = [[JBLineChartView alloc] init];
+	self.lineChartView = [JBLineChartView new];
 	self.lineChartView.frame = CGRectMake(kJBLineChartViewControllerChartPadding, kJBLineChartViewControllerChartPadding, self.view.bounds.size.width - (kJBLineChartViewControllerChartPadding * 2), kJBLineChartViewControllerChartHeight);
 	self.lineChartView.delegate = self;
 	self.lineChartView.dataSource = self;
+    
 	self.lineChartView.headerPadding = kJBLineChartViewControllerChartHeaderPadding;
 	self.lineChartView.backgroundColor = kJBColorLineChartBackground;
 	
 	JBChartHeaderView *headerView = [[JBChartHeaderView alloc] initWithFrame:CGRectMake(kJBLineChartViewControllerChartPadding, ceil(self.view.bounds.size.height * 0.5) - ceil(kJBLineChartViewControllerChartHeaderHeight * 0.5), self.view.bounds.size.width - (kJBLineChartViewControllerChartPadding * 2), kJBLineChartViewControllerChartHeaderHeight)];
+    
 	headerView.titleLabel.text = [kJBStringLabelAverageDailyRainfall uppercaseString];
 	headerView.titleLabel.textColor = kJBColorLineChartHeader;
 	headerView.titleLabel.shadowColor = [UIColor colorWithWhite:1.0 alpha:0.25];
@@ -153,11 +130,17 @@ NSString * const kJBLineChartViewControllerNavButtonViewKey = @"view";
 	
 	JBLineChartFooterView *footerView = [[JBLineChartFooterView alloc] initWithFrame:CGRectMake(kJBLineChartViewControllerChartPadding, ceil(self.view.bounds.size.height * 0.5) - ceil(kJBLineChartViewControllerChartFooterHeight * 0.5), self.view.bounds.size.width - (kJBLineChartViewControllerChartPadding * 2), kJBLineChartViewControllerChartFooterHeight)];
 	footerView.backgroundColor = [UIColor clearColor];
-	footerView.leftLabel.text = [[self.daysOfWeek firstObject] uppercaseString];
-	footerView.leftLabel.textColor = [UIColor whiteColor];
-	footerView.rightLabel.text = [[self.daysOfWeek lastObject] uppercaseString];;
-	footerView.rightLabel.textColor = [UIColor whiteColor];
+	footerView.leftLabel.textColor = [UIColor blackColor];
+	footerView.rightLabel.textColor = [UIColor blackColor];
+    footerView.centerLabel.textColor = [UIColor redColor];
 	footerView.sectionCount = [[self largestLineData] count];
+    footerView.leftLabel.text = @"footer left";
+    footerView.rightLabel.text = @"footer right";
+    footerView.centerLabel.text = @"footer center";
+    
+    footerView.leftLabel.backgroundColor = [UIColor purpleColor];
+    footerView.rightLabel.backgroundColor = [UIColor yellowColor];
+    
 	self.lineChartView.footerView = footerView;
 	
 	[self.view addSubview:self.lineChartView];
@@ -202,8 +185,7 @@ NSString * const kJBLineChartViewControllerNavButtonViewKey = @"view";
 	return [[self.chartData objectAtIndex:lineIndex] count];
 }
 
-- (BOOL)lineChartView:(JBLineChartView *)lineChartView showsDotsForLineAtLineIndex:(NSUInteger)lineIndex
-{
+- (BOOL)lineChartView:(JBLineChartView *)lineChartView showsDotsForLineAtLineIndex:(NSUInteger)lineIndex {
 	return lineIndex == JBLineChartViewLineStyleDashed;
 }
 
@@ -226,7 +208,6 @@ NSString * const kJBLineChartViewControllerNavButtonViewKey = @"view";
 	[self.informationView setTitleText:lineIndex == JBLineChartLineSolid ? kJBStringLabelMetropolitanAverage : kJBStringLabelNationalAverage];
 	[self.informationView setHidden:NO animated:YES];
 	[self setTooltipVisible:YES animated:YES atTouchPoint:touchPoint];
-	[self.tooltipView setText:[[self.daysOfWeek objectAtIndex:horizontalIndex] uppercaseString]];
 }
 
 - (void)didDeselectLineInLineChartView:(JBLineChartView *)lineChartView

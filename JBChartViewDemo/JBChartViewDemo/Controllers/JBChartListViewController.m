@@ -100,7 +100,6 @@ NSInteger const kJBChartListViewControllerCellHeight = 100;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     if (indexPath.row == JBChartListViewControllerRowLineChart)
     {
         JBLineChartViewController *lineChartController = [[JBLineChartViewController alloc] init];

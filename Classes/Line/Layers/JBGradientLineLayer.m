@@ -25,7 +25,6 @@ static CGFloat const kJBGradientLineLayerDefaultAlpha = 1.0f;
 		self.startPoint = gradientLayer.startPoint;
 		self.endPoint = gradientLayer.endPoint;
 		self.type = gradientLayer.type;
-		
 		_tag = tag;
 		_filled = filled;
 		_currentPath = [currentPath copy];
