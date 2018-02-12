@@ -465,11 +465,9 @@ static NSInteger const kJBLineChartUnselectedLineIndex = -1;
 	for (NSInteger lineIndex=0; lineIndex<numberOfLines; lineIndex++)
 	{
 		BOOL showsDots = NO;
-		if ([self.dataSource respondsToSelector:@selector(lineChartView:showsDotsForLineAtLineIndex:)])
-		{
+		if ([self.dataSource respondsToSelector:@selector(lineChartView:showsDotsForLineAtLineIndex:)]) {
 			showsDots = [self.dataSource lineChartView:self showsDotsForLineAtLineIndex:lineIndex];
 		}
-		
 		CGFloat lineWidth = [self lineWidthForLineIndex:lineIndex];
 		
 		CGFloat maxDotLength = 0;

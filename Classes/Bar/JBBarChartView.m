@@ -932,8 +932,7 @@ static UIColor *kJBBarChartViewDefaultBarColor = nil;
 
 #pragma mark - JBGradientBarViewDataSource
 
-- (CGRect)chartViewBoundsForGradientBarView:(JBGradientBarView *)gradientBarView
-{
+- (CGRect)chartViewBoundsForGradientBarView:(JBGradientBarView *)gradientBarView {
 	return self.bounds;
 }
 

@@ -35,7 +35,7 @@ static UIColor *kJBChartInformationViewShadowColor = nil;
 @interface JBChartInformationView ()
 
 @property (nonatomic, strong) JBChartValueView *valueView;
-@property (nonatomic, strong) UILabel *titleLabel;
+//@property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIView *separatorView;
 
 // Position
@@ -151,6 +151,20 @@ static UIColor *kJBChartInformationViewShadowColor = nil;
     self.valueView.valueLabel.textColor = valueAndUnitColor;
     self.valueView.unitLabel.textColor = valueAndUnitColor;
     [self.valueView setNeedsDisplay];
+}
+
+- (void)setValueColor:(UIColor *)valueColor {
+    self.valueView.valueLabel.textColor = valueColor;
+    [self.valueView setNeedsDisplay];
+}
+
+- (void)setUnitTextColor:(UIColor *)textColor {
+    self.valueView.unitLabel.textColor = textColor;
+    [self.valueView setNeedsDisplay];
+}
+- (void)setTitleColor:(UIColor *)titleColor {
+    self.titleLabel.textColor = titleColor;
+    [self setNeedsDisplay];
 }
 
 - (void)setTextShadowColor:(UIColor *)shadowColor

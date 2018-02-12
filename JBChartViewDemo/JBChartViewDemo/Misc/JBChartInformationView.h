@@ -25,7 +25,14 @@
 - (void)setTextShadowColor:(UIColor *)shadowColor;
 - (void)setSeparatorColor:(UIColor *)separatorColor;
 
+- (void)setValueColor:(UIColor *)valueColor;
+- (void)setUnitTextColor:(UIColor *)textColor;
+- (void)setTitleColor:(UIColor *)titleColor;
+
 // Visibility
 - (void)setHidden:(BOOL)hidden animated:(BOOL)animated;
+
+@property (nonatomic, strong, readonly) UILabel *titleLabel;
+
 
 @end
